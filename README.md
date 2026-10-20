@@ -9,13 +9,29 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Todavía no se han incorporado evidencias de ejecución. Las secciones se completarán con los pasos efectivamente realizados, sus resultados y las capturas correspondientes.
+**Estado:** en elaboración. MongoDB ya está funcionando en Docker y se incorporó la primera evidencia. La conexión desde Compass, la importación, el modelado y los ejercicios continúan pendientes.
 
 ## 1. Entorno e importación de los datos
 
-Pendiente de ejecución y documentación.
+### 1.1. MongoDB en Docker
 
-- [ ] MongoDB funcionando en Docker.
+Se creó un contenedor de MongoDB Community Server utilizando la imagen `mongodb/mongodb-community-server:8.0-ubi8`. Desde PowerShell se ejecutó:
+
+```powershell
+docker run -d --name mongodb-imdb-burghi -p 127.0.0.1:27017:27017 -v mongodb-imdb-burghi-data:/data/db mongodb/mongodb-community-server:8.0-ubi8
+```
+
+Docker descargó la imagen y devolvió el identificador del contenedor, cuyo prefijo es `e3ffd0fdfcdb`. El puerto 27017 del contenedor se publicó en `127.0.0.1:27017` para permitir la conexión desde el mismo equipo. El volumen `mongodb-imdb-burghi-data`, montado en `/data/db`, se utiliza para conservar los datos entre ejecuciones del contenedor.
+
+En Docker Desktop se comprobó que el contenedor estaba en ejecución: la fila muestra el indicador verde, el mismo prefijo de identificador y el mapeo `27017:27017`. También se observa el estado **Engine running**.
+
+![Contenedor de MongoDB en ejecución en Docker Desktop](evidencias/Captura%20de%20pantalla%202026-10-20%20201357.png)
+
+*Figura 1. MongoDB en Docker Desktop: contenedor activo y puerto 27017 publicado. Captura del 20 de octubre de 2026.*
+
+### Avance de la configuración
+
+- [x] MongoDB funcionando en Docker.
 - [ ] Conexión desde MongoDB Compass.
 - [ ] Importación de los tres archivos de IMDb y comprobación de los recuentos.
 - [ ] Modelo de documentos, tipos de datos y justificación.
