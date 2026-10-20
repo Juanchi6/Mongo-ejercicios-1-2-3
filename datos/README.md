@@ -10,7 +10,15 @@ Se descargaron el 20 de octubre de 2026 los tres archivos completos indicados po
 | [title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz) | `ratings.json` | `ratings` | 1.723.150 |
 | [name.basics.tsv.gz](https://datasets.imdbws.com/name.basics.tsv.gz) | `personas.json` | `personas` | 15.750.813 |
 
-**Estos recuentos corresponden a los archivos fuente, no a documentos ya importados en MongoDB.** La carga se comprobará por separado y se documentará con evidencias de ejecución.
+Los recuentos de la tabla anterior corresponden a los archivos fuente. La carga en MongoDB se comprueba por separado con evidencias de ejecución.
+
+## Estado de la importación
+
+| Colección | Documentos importados verificados | Evidencia |
+|---|---:|---|
+| `titulos` | 12.881.680 | [Figura 3: importación completada](../evidencias/03_importacion_titulos.png) |
+| `ratings` | Pendiente | Pendiente |
+| `personas` | Pendiente | Pendiente |
 
 Los archivos de datos se conservan localmente. En el repositorio se registra el procedimiento para reproducir su preparación.
 

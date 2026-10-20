@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. MongoDB está funcionando en Docker y conectado desde Compass; se incorporaron las dos primeras evidencias. La importación, el modelado y los ejercicios continúan pendientes.
+**Estado:** en elaboración. MongoDB está funcionando en Docker y conectado desde Compass. Se importaron 12.881.680 documentos en `titulos` y se incorporaron tres evidencias. Restan las valoraciones, las personas, la justificación del modelo y la resolución de los ejercicios.
 
 ## 1. Entorno e importación de los datos
 
@@ -45,13 +45,25 @@ Se descargaron los tres archivos completos de IMDb y se convirtieron de TSV comp
 
 El procedimiento reproducible, los recuentos de origen y los hashes de las fuentes se detallan en [Fuentes y preparación de los datos](datos/README.md).
 
-**Esta preparación todavía no implica que los datos estén importados en MongoDB.** La carga y sus recuentos se documentarán cuando se verifiquen en Compass.
+La preparación se comprobó por separado de la carga en MongoDB. A continuación se registra cada importación con su recuento y su evidencia.
+
+### 1.4. Importación de los títulos
+
+Se creó la base `imdb_burghi_2026` y la colección `titulos`. Desde **Add Data → Import JSON or CSV file** se seleccionó `titulos.json`, generado a partir del archivo completo `title.basics.tsv.gz`.
+
+Compass confirmó **Import completed: 12.881.680 documents imported**. El total coincide con los 12.881.680 registros de la fuente. La captura muestra también la base y colección utilizadas y documentos de ejemplo: `startYear` y `runtimeMinutes` aparecen como números, `endYear` como `null` cuando falta el dato y `genres` como array. El identificador original de IMDb se conserva en `_id`.
+
+![Importación completa de los títulos de IMDb](evidencias/03_importacion_titulos.png)
+
+*Figura 3. Colección titulos con 12.881.680 documentos y confirmación de importación completada en MongoDB Compass.*
 
 ### Avance de la configuración
 
 - [x] MongoDB funcionando en Docker.
 - [x] Conexión desde MongoDB Compass.
-- [ ] Importación de los tres archivos de IMDb y comprobación de los recuentos.
+- [x] Importación de `title.basics` en `titulos`: 12.881.680 documentos.
+- [ ] Importación de `title.ratings` en `ratings` y comprobación del recuento.
+- [ ] Importación de `name.basics` en `personas` y comprobación del recuento.
 - [ ] Modelo de documentos, tipos de datos y justificación.
 
 ## 2. Ejercicio 1: consultas
