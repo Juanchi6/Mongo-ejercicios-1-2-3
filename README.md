@@ -39,6 +39,14 @@ La captura muestra la conexión activa con indicador verde y las bases del siste
 
 *Figura 2. Compass conectado a IMDb local - Docker, con las bases del sistema disponibles.*
 
+### 1.3. Preparación de los archivos de IMDb
+
+Se descargaron los tres archivos completos de IMDb y se convirtieron de TSV comprimido a JSON con un documento por línea, para poder importarlos desde Compass. Se conservaron todos los registros y los identificadores originales; se normalizaron los campos numéricos, los arrays y los valores ausentes antes de la carga.
+
+El procedimiento reproducible, los recuentos de origen y los hashes de las fuentes se detallan en [Fuentes y preparación de los datos](datos/README.md).
+
+**Esta preparación todavía no implica que los datos estén importados en MongoDB.** La carga y sus recuentos se documentarán cuando se verifiquen en Compass.
+
 ### Avance de la configuración
 
 - [x] MongoDB funcionando en Docker.
