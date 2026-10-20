@@ -6,9 +6,10 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 
 | Figura | Archivo | Resultado documentado |
 |---|---|---|
-| 1 | [MongoDB en Docker](Captura%20de%20pantalla%202026-10-20%20201357.png) | Contenedor en ejecución, identificador `e3ffd0fdfcdb`, puerto `27017:27017` y motor de Docker activo. |
+| 1 | [MongoDB en Docker](01_mongodb_docker.png) | Contenedor en ejecución, identificador `e3ffd0fdfcdb`, puerto `27017:27017` y motor de Docker activo. |
+| 2 | [Conexión desde Compass](02_conexion_compass.png) | Conexión IMDb local - Docker activa y bases del sistema admin, config y local visibles. |
 
-Se conserva el nombre original del archivo subido.
+Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 
 ## Criterio de registro
 

@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. MongoDB ya está funcionando en Docker y se incorporó la primera evidencia. La conexión desde Compass, la importación, el modelado y los ejercicios continúan pendientes.
+**Estado:** en elaboración. MongoDB está funcionando en Docker y conectado desde Compass; se incorporaron las dos primeras evidencias. La importación, el modelado y los ejercicios continúan pendientes.
 
 ## 1. Entorno e importación de los datos
 
@@ -25,14 +25,24 @@ Docker descargó la imagen y devolvió el identificador del contenedor, cuyo pre
 
 En Docker Desktop se comprobó que el contenedor estaba en ejecución: la fila muestra el indicador verde, el mismo prefijo de identificador y el mapeo `27017:27017`. También se observa el estado **Engine running**.
 
-![Contenedor de MongoDB en ejecución en Docker Desktop](evidencias/Captura%20de%20pantalla%202026-10-20%20201357.png)
+![Contenedor de MongoDB en ejecución en Docker Desktop](evidencias/01_mongodb_docker.png)
 
 *Figura 1. MongoDB en Docker Desktop: contenedor activo y puerto 27017 publicado. Captura del 20 de octubre de 2026.*
+
+### 1.2. Conexión desde MongoDB Compass
+
+Se agregó una conexión con la URI `mongodb://127.0.0.1:27017`, utilizando el nombre **IMDb local - Docker**. La conexión permite acceder desde Compass al servidor MongoDB que se está ejecutando en el contenedor local.
+
+La captura muestra la conexión activa con indicador verde y las bases del sistema `admin`, `config` y `local`. En esta etapa todavía no se había creado la base del práctico ni importado los archivos de IMDb.
+
+![Conexión local activa en MongoDB Compass](evidencias/02_conexion_compass.png)
+
+*Figura 2. Compass conectado a IMDb local - Docker, con las bases del sistema disponibles.*
 
 ### Avance de la configuración
 
 - [x] MongoDB funcionando en Docker.
-- [ ] Conexión desde MongoDB Compass.
+- [x] Conexión desde MongoDB Compass.
 - [ ] Importación de los tres archivos de IMDb y comprobación de los recuentos.
 - [ ] Modelo de documentos, tipos de datos y justificación.
 
