@@ -9,7 +9,7 @@ Este documento registra la resolución de los ejercicios de MongoDB sobre los da
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** ejercicios 1, 2 y 3 ejecutados y documentados. La interpretación del campo endYear se explica en las secciones 2.5 y 2.6.
+**Estado:** ejercicios 1, 2 y 3 ejecutados y documentados, cotejados punto por punto con las páginas 102, 103 y 105. Las consultas literales de películas con endYear y su ordenamiento están ejecutadas y verificadas; las consultas ampliadas a series se identifican como comprobaciones complementarias.
 
 ## 1. Entorno e importación de los datos
 
@@ -225,7 +225,22 @@ Entre los documentos visibles aparecen `tt0035599`, de tipo `tvSeries`, con `sta
 
 ### 2.6. Comparar endYear con startYear
 
-Se continuó con la interpretación sobre todos los tipos de título para incluir las series cuyos años de inicio y finalización están informados:
+Para cumplir literalmente la consulta de **películas** se aplicó este filtro, incluyendo `titleType: "movie"`:
+
+```javascript
+{
+  titleType: "movie",
+  startYear: { $type: "number" },
+  endYear: { $type: "number" },
+  $expr: { $gt: ["$endYear", "$startYear"] }
+}
+```
+
+Se ejecutó con `find(filtroRevision).toArray()` en la shell de Compass. El resultado observado fue **[]**, es decir, cero películas. No se trata de una deducción: la ejecución literal se verifica en la figura 20, junto con el ordenamiento del ejercicio 2.
+
+Las condiciones de tipo exigen años numéricos. `$expr` permite comparar los campos del mismo documento y `$gt` exige que el año final sea estrictamente mayor que el inicial.
+
+**Comprobación complementaria sobre todos los tipos de título.** También se ejecutó la comparación sin restringir el tipo:
 
 ```javascript
 {
@@ -235,15 +250,46 @@ Se continuó con la interpretación sobre todos los tipos de título para inclui
 }
 ```
 
-Las dos primeras condiciones requieren valores numéricos. `$expr` permite comparar dos campos del mismo documento: `$gt` comprueba si `endYear` es estrictamente mayor que `startYear`.
+Esta consulta ampliada, que incluye series, devolvió **72.068 resultados**. Entre los documentos visibles aparecen `tt0035599` (1943–1947) y `tt0035803` (1940–1945), ambos de tipo `tvSeries`.
 
-Compass mostró **72.068 resultados**, con la paginación `1–25 of 72068`. Se observan, entre otros, los títulos `tt0035599` (1943–1947) y `tt0035803` (1940–1945), de tipo `tvSeries`, cuyos años cumplen la comparación.
+![Comparación complementaria sobre todos los tipos](evidencias/12_consulta_endyear_mayor_startyear.png)
 
-![Títulos cuyo año final es mayor que el inicial](evidencias/12_consulta_endyear_mayor_startyear.png)
+*Figura 12. Comparación complementaria sobre todos los tipos: 72.068 resultados y series con ambos años informados.*
 
-*Figura 12. Comparación endYear mayor que startYear: 72.068 resultados y documentos con ambos años visibles. El filtro completo utilizado se transcribe en esta sección.*
+**Verificación conjunta literal de los ejercicios 1 y 2.** Se ejecutó este bloque completo en la shell:
 
-**Alcance de la interpretación.** La consigna utiliza el término «películas», pero el campo `endYear` corresponde a series en la fuente de IMDb. Por eso se mostró primero la consulta literal sobre `movie`, sin coincidencias, y luego las consultas sobre todos los tipos de título para demostrar el uso del campo y la comparación. Si a esta última consulta se agregara `titleType: "movie"`, necesariamente seguiría vacía: sería un subconjunto de la consulta sin resultados de la figura 10. Esta última afirmación es una deducción de esa evidencia; no se presenta como otra ejecución.
+```javascript
+var coleccionRevision = db.getSiblingDB("imdb_burghi_2026").titulos;
+
+var filtroRevision = {
+  titleType: "movie",
+  startYear: { $type: "number" },
+  endYear: { $type: "number" },
+  $expr: { $gt: ["$endYear", "$startYear"] }
+};
+
+printjson({
+  ejercicio1_comparacion: coleccionRevision
+    .find(filtroRevision).toArray(),
+
+  ejercicio2_ordenamiento: coleccionRevision.aggregate([
+    { $match: filtroRevision },
+    { $sort: { startYear: 1, _id: 1 } }
+  ]).toArray()
+});
+```
+
+Salida observada:
+
+```javascript
+{ ejercicio1_comparacion: [], ejercicio2_ordenamiento: [] }
+```
+
+![Consulta y ordenamiento literales de películas](evidencias/20_verificacion_literal_endyear.png)
+
+*Figura 20. Ejecución de la consulta literal de películas y de su ordenamiento por startYear; ambos devuelven un array vacío.*
+
+Se distinguen los resultados literales de películas de las comprobaciones complementarias que incluyen series. Los resultados vacíos son coherentes con la definición de `endYear` de IMDb, que informa el año de finalización de series.
 
 ### Avance de las consultas
 
@@ -253,15 +299,34 @@ Compass mostró **72.068 resultados**, con la paginación `1–25 of 72068`. Se 
 - [x] Mostrar las películas posteriores a 1999.
 - [x] Consultar películas con un valor de `endYear`: cero resultados.
 - [x] Comprobar `endYear` sobre todos los tipos de título: 163.284 resultados.
-- [x] Comparar `endYear` con `startYear` sobre todos los tipos de título: 72.068 resultados.
+- [x] Comparar `endYear` con `startYear` en películas: cero resultados, ejecución verificada en la figura 20.
+- [x] Comprobación complementaria de la comparación sobre todos los tipos: 72.068 resultados.
 
-La interpretación del término «películas» en las consultas de `endYear` se detalla en las secciones 2.5 y 2.6.
+Las consultas literales de películas y las comprobaciones complementarias de series se distinguen en las secciones 2.5 y 2.6.
 
 ## 3. Ejercicio 2: agregaciones
 
-### 3.1. Ordenar por startYear los títulos cuyo endYear es mayor que startYear
+### 3.1. Ordenar por startYear las películas cuyo endYear es mayor que startYear
 
-En `imdb_burghi_2026.titulos` se abrió **Aggregations**, se seleccionó el modo de texto y se ejecutó el siguiente pipeline con **Run**:
+La agregación literal utiliza el mismo filtro de películas de la sección 2.6:
+
+```javascript
+[
+  {
+    $match: {
+      titleType: "movie",
+      startYear: { $type: "number" },
+      endYear: { $type: "number" },
+      $expr: { $gt: ["$endYear", "$startYear"] }
+    }
+  },
+  { $sort: { startYear: 1, _id: 1 } }
+]
+```
+
+Se ejecutó en la shell como `coleccionRevision.aggregate([{ $match: filtroRevision }, { $sort: { startYear: 1, _id: 1 } }]).toArray()`, dentro del bloque conjunto transcrito en la sección 2.6. El resultado observado fue **[]**, identificado como `ejercicio2_ordenamiento` en la figura 20. La agregación se ejecutó correctamente; el conjunto de películas a ordenar es vacío.
+
+**Comprobación complementaria sobre todos los tipos de título.** Se conserva además la ejecución ampliada en Aggregations de Compass:
 
 ```javascript
 [
@@ -276,7 +341,7 @@ En `imdb_burghi_2026.titulos` se abrió **Aggregations**, se seleccionó el modo
 ]
 ```
 
-`$match` conserva los títulos con ambos años numéricos y año final mayor que el inicial. Se mantiene la interpretación sobre todos los tipos de título explicada en el ejercicio 1. `$sort` ordena por `startYear` ascendente; `_id` se utiliza como segundo criterio para desempatar los títulos del mismo año.
+`$match` conserva los títulos con ambos años numéricos y año final mayor que el inicial. Esta ejecución complementaria incluye series y no sustituye la agregación literal anterior. `$sort` ordena por `startYear` ascendente; `_id` se utiliza como segundo criterio para desempatar los títulos del mismo año.
 
 ![Editor del pipeline de ordenamiento](evidencias/13a_agregacion_orden_startyear_pipeline.png)
 
@@ -407,7 +472,8 @@ La captura muestra una vista previa de diez documentos; la tabla transcribe úni
 
 ### Avance de las agregaciones
 
-- [x] Ordenar por `startYear` los títulos cuyo `endYear` sea mayor que `startYear`.
+- [x] Ordenar por `startYear` las películas cuyo `endYear` sea mayor que `startYear`: resultado vacío, ejecución verificada en la figura 20.
+- [x] Comprobación complementaria del ordenamiento sobre todos los tipos de título.
 - [x] Contar las películas de 1999: 5.154.
 - [x] Contar las películas de género Western: 8.185.
 - [x] Generar un array con los títulos de los westerns: 8.185 elementos.
