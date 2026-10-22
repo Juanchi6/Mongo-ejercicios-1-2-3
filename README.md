@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. MongoDB está funcionando en Docker y conectado desde Compass. Se importaron 12.881.680 documentos en `titulos` y se incorporaron tres evidencias. Restan las valoraciones, las personas, la justificación del modelo y la resolución de los ejercicios.
+**Estado:** en elaboración. MongoDB está funcionando en Docker y conectado desde Compass. Se importaron 12.881.680 documentos en `titulos` y 1.723.150 en `ratings`, con cuatro evidencias incorporadas. Restan las personas, la justificación del modelo y la resolución de los ejercicios.
 
 ## 1. Entorno e importación de los datos
 
@@ -57,12 +57,22 @@ Compass confirmó **Import completed: 12.881.680 documents imported**. El total 
 
 *Figura 3. Colección titulos con 12.881.680 documentos y confirmación de importación completada en MongoDB Compass.*
 
+### 1.5. Importación de las valoraciones
+
+Dentro de `imdb_burghi_2026` se creó la colección normal `ratings`, con la opción Time Series desactivada. Desde **Add Data → Import JSON or CSV file** se importó `ratings.json`, preparado a partir del archivo completo `title.ratings.tsv.gz`.
+
+Compass confirmó **Import completed: 1.723.150 documents imported**, y el mismo total aparece en la navegación de documentos. El recuento coincide con el de la fuente. Los documentos muestran el identificador del título en `_id` y los campos numéricos `averageRating` y `numVotes`. Por ejemplo, para `tt0000001` se observa una valoración de `5.7` y `2237` votos.
+
+![Importación completa de las valoraciones de IMDb](evidencias/04_importacion_ratings.png)
+
+*Figura 4. Colección ratings con 1.723.150 documentos y confirmación de importación completada en MongoDB Compass, el 22 de octubre de 2026.*
+
 ### Avance de la configuración
 
 - [x] MongoDB funcionando en Docker.
 - [x] Conexión desde MongoDB Compass.
 - [x] Importación de `title.basics` en `titulos`: 12.881.680 documentos.
-- [ ] Importación de `title.ratings` en `ratings` y comprobación del recuento.
+- [x] Importación de `title.ratings` en `ratings`: 1.723.150 documentos.
 - [ ] Importación de `name.basics` en `personas` y comprobación del recuento.
 - [ ] Modelo de documentos, tipos de datos y justificación.
 

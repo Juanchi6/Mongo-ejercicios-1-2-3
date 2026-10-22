@@ -9,6 +9,7 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 1 | [MongoDB en Docker](01_mongodb_docker.png) | Contenedor en ejecución, identificador `e3ffd0fdfcdb`, puerto `27017:27017` y motor de Docker activo. |
 | 2 | [Conexión desde Compass](02_conexion_compass.png) | Conexión IMDb local - Docker activa y bases del sistema admin, config y local visibles. |
 | 3 | [Importación de títulos](03_importacion_titulos.png) | Importación completada en imdb_burghi_2026.titulos: 12.881.680 documentos. |
+| 4 | [Importación de valoraciones](04_importacion_ratings.png) | Importación completada en imdb_burghi_2026.ratings: 1.723.150 documentos. |
 
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 
