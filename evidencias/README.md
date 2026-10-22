@@ -14,6 +14,7 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 6 | [Búsqueda de Fight Club](06_consulta_fight_club.png) | Documentos de las películas Fight Club de 1999 y 2023 visibles; contador total N/A. |
 | 7 | [Fight Club de 1999](07_consulta_fight_club_1999.png) | Filtro completo y un único resultado: tt0137523, Fight Club, 1999. |
 | 8 | [Películas de 1999](08_consulta_peliculas_1999.png) | Filtro completo y listado de películas de 1999: 5.154 resultados. |
+| 9 | [Películas posteriores a 1999](09_consulta_peliculas_posteriores_1999.png) | Filtro startYear mayor que 1999: 388.352 resultados. |
 
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 

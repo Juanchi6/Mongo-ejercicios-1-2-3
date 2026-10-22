@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizaron las tres primeras consultas del ejercicio 1 y se incorporaron ocho evidencias. Continúan pendientes las demás consultas, las agregaciones y las modificaciones.
+**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizaron las cuatro primeras consultas del ejercicio 1 y se incorporaron nueve evidencias. Continúan pendientes las consultas de endYear, las agregaciones y las modificaciones.
 
 ## 1. Entorno e importación de los datos
 
@@ -167,12 +167,31 @@ Compass mostró **5.154 resultados**, con la paginación `1–25 of 5154`. La ca
 
 *Figura 8. Películas de 1999: filtro por tipo y año, listado de resultados y total de 5.154 documentos en Compass.*
 
+### 2.4. Mostrar las películas posteriores a 1999
+
+En la misma colección se ejecutó el siguiente filtro:
+
+```javascript
+{
+  titleType: "movie",
+  startYear: { $gt: 1999 }
+}
+```
+
+El operador `$gt` selecciona valores estrictamente mayores que 1999. Por lo tanto, se incluyen las películas con `startYear` desde 2000, sin fijar un año máximo; las de 1999 quedan excluidas.
+
+Compass mostró **388.352 resultados**, con la paginación `1–25 of 388352`. La captura permite verificar el filtro completo y el total del listado en vista de tabla.
+
+![Películas posteriores a 1999](evidencias/09_consulta_peliculas_posteriores_1999.png)
+
+*Figura 9. Filtro de películas con startYear mayor que 1999 y total de 388.352 resultados.*
+
 ### Avance de las consultas
 
 - [x] Buscar la película Fight Club.
 - [x] Buscar Fight Club de 1999.
 - [x] Mostrar las películas de 1999.
-- [ ] Mostrar las películas posteriores a 1999.
+- [x] Mostrar las películas posteriores a 1999.
 - [ ] Consultar los títulos con un valor de `endYear`.
 - [ ] Comparar `endYear` con `startYear`.
 
