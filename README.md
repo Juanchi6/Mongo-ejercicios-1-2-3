@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y verificadas mediante cinco evidencias. El modelo documental está justificado. Restan las consultas, las agregaciones y las modificaciones de los ejercicios 1 a 3.
+**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizó la primera consulta de Fight Club y se incorporaron seis evidencias. Continúan pendientes las demás consultas, las agregaciones y las modificaciones.
 
 ## 1. Entorno e importación de los datos
 
@@ -114,9 +114,25 @@ El criterio de elegir entre datos embebidos y referencias se apoya en los concep
 
 ## 2. Ejercicio 1: consultas
 
-Pendiente de ejecución y documentación.
+### 2.1. Buscar la película Fight Club
 
-- [ ] Buscar la película Fight Club.
+En la pestaña **Documents** de `imdb_burghi_2026.titulos` se ejecutó el siguiente filtro y se pulsó **Find**:
+
+```javascript
+{ titleType: "movie", primaryTitle: "Fight Club" }
+```
+
+El filtro exige que el tipo de título sea `movie` y que el título principal sea exactamente `Fight Club`, sin restringir el año.
+
+La captura muestra dos documentos: `tt0137523`, con `startYear: 1999` y duración de 139 minutos, y `tt15561202`, con `startYear: 2023` y duración de 135 minutos. Ambos tienen `primaryTitle: "Fight Club"`. Esto permite observar que buscar solo por el nombre no identifica necesariamente una única película.
+
+![Consulta de películas tituladas Fight Club](evidencias/06_consulta_fight_club.png)
+
+*Figura 6. Búsqueda de Fight Club: documentos de 1999 y 2023 visibles. La barra del filtro aparece parcialmente recortada y el contador total figura como N/A; los dos documentos mostrados son legibles.*
+
+### Avance de las consultas
+
+- [x] Buscar la película Fight Club.
 - [ ] Buscar Fight Club de 1999.
 - [ ] Mostrar las películas de 1999.
 - [ ] Mostrar las películas posteriores a 1999.
