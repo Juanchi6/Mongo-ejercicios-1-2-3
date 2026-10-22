@@ -12,6 +12,7 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 4 | [Importación de valoraciones](04_importacion_ratings.png) | Importación completada en imdb_burghi_2026.ratings: 1.723.150 documentos. |
 | 5 | [Importación de personas](05_importacion_personas.png) | Importación completada en imdb_burghi_2026.personas: 15.750.813 documentos. |
 | 6 | [Búsqueda de Fight Club](06_consulta_fight_club.png) | Documentos de las películas Fight Club de 1999 y 2023 visibles; contador total N/A. |
+| 7 | [Fight Club de 1999](07_consulta_fight_club_1999.png) | Filtro completo y un único resultado: tt0137523, Fight Club, 1999. |
 
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 

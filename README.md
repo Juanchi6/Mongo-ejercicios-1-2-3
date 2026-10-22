@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizó la primera consulta de Fight Club y se incorporaron seis evidencias. Continúan pendientes las demás consultas, las agregaciones y las modificaciones.
+**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizaron las dos consultas de Fight Club y se incorporaron siete evidencias. Continúan pendientes las demás consultas, las agregaciones y las modificaciones.
 
 ## 1. Entorno e importación de los datos
 
@@ -130,10 +130,28 @@ La captura muestra dos documentos: `tt0137523`, con `startYear: 1999` y duració
 
 *Figura 6. Búsqueda de Fight Club: documentos de 1999 y 2023 visibles. La barra del filtro aparece parcialmente recortada y el contador total figura como N/A; los dos documentos mostrados son legibles.*
 
+### 2.2. Buscar Fight Club de 1999
+
+En la misma colección se agregó al filtro la condición `startYear: 1999`:
+
+```javascript
+{
+  titleType: "movie",
+  primaryTitle: "Fight Club",
+  startYear: 1999
+}
+```
+
+Las tres condiciones deben cumplirse simultáneamente. El año se compara como número. Compass mostró **un resultado** (`1–1 of 1`): el documento `tt0137523`, con título principal y original `Fight Club`, año de inicio `1999` y duración de `139` minutos. Así se distingue esta película del título homónimo de 2023 observado en la consulta anterior.
+
+![Consulta de Fight Club de 1999](evidencias/07_consulta_fight_club_1999.png)
+
+*Figura 7. Filtro completo por película, título y año, con un único resultado: Fight Club de 1999.*
+
 ### Avance de las consultas
 
 - [x] Buscar la película Fight Club.
-- [ ] Buscar Fight Club de 1999.
+- [x] Buscar Fight Club de 1999.
 - [ ] Mostrar las películas de 1999.
 - [ ] Mostrar las películas posteriores a 1999.
 - [ ] Consultar los títulos con un valor de `endYear`.
