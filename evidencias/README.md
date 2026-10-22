@@ -24,6 +24,8 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 15 | [Conteo de westerns](15_agregacion_conteo_westerns.png) | Filtro por movie y Western, con resultado cantidadWesterns: 8185. |
 | 16 | [Array de títulos de westerns](16_array_titulos_westerns.png) | Array de 8.185 elementos y cantidad: 8185. |
 | 17 | [Westerns agrupados por género](17_westerns_agrupados_genero.png) | Grupos Action, Adult, Adventure, Animation y Biography, con cantidades y arrays contraídos. |
+| 18 | [Fight Club actualizado](18_fight_club_actualizado.png) | Consulta del documento de 1999 con Comedia oscura, dirección, fotografía, producción y elenco principal. |
+| 19 | [Shrek 5 insertado](19_shrek5_insertado.png) | Inserción y consulta del documento local con los valores indicados por la consigna. |
 
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 

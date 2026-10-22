@@ -5,11 +5,11 @@
 
 ## Introducción
 
-Este documento se utilizará para registrar la resolución de los ejercicios de MongoDB sobre los datos de IMDb, correspondientes a las páginas 102, 103 y 105 de la presentación «Clase 4 - 5 - NoSQL 2026».
+Este documento registra la resolución de los ejercicios de MongoDB sobre los datos de IMDb, correspondientes a las páginas 102, 103 y 105 de la presentación «Clase 4 - 5 - NoSQL 2026».
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. El ejercicio 2 está documentado con sus cinco agregaciones. Restan las modificaciones del ejercicio 3.
+**Estado:** ejercicios 1, 2 y 3 ejecutados y documentados. La interpretación del campo endYear se explica en las secciones 2.5 y 2.6.
 
 ## 1. Entorno e importación de los datos
 
@@ -89,7 +89,7 @@ Se eligió un modelo con tres colecciones, utilizando documentos independientes 
 
 **Relaciones y referencias.** El documento de `ratings` se relaciona con el título que tiene el mismo `_id`. Para este modelo, cada título puede tener cero o una valoración agregada: no todos aparecen en el archivo de valoraciones. Las entradas de `personas.knownForTitles` son identificadores de `titulos`. Una persona puede tener varios títulos conocidos y un título puede estar asociado a varias personas. Estas son referencias lógicas; no se configuraron restricciones de clave foránea.
 
-`knownForTitles` solo contiene obras por las que una persona es conocida. No representa su filmografía completa ni permite reconstruir por sí solo el elenco o los roles de una película. Los créditos solicitados en el ejercicio 3 se verificarán con fuentes adicionales.
+`knownForTitles` solo contiene obras por las que una persona es conocida. No representa su filmografía completa ni permite reconstruir por sí solo el elenco o los roles de una película. Los créditos incorporados en el ejercicio 3 se verificaron con una fuente adicional, citada en la sección 4.
 
 **Datos incluidos dentro del documento.** Los géneros y las profesiones se almacenaron como arrays porque son listas cortas que se consultan junto al título o la persona. No se crearon colecciones separadas para cada valor de esas listas.
 
@@ -161,7 +161,7 @@ En `imdb_burghi_2026.titulos` se quitó la condición sobre el nombre y se ejecu
 
 El filtro selecciona los títulos de tipo película cuyo año de inicio es 1999. No incluye series, episodios ni cortometrajes con otro `titleType`.
 
-Compass mostró **5.154 resultados**, con la paginación `1–25 of 5154`. La captura incluye el filtro completo y parte del listado en vista de tabla. El conteo mediante agregación solicitado en el ejercicio 2 se ejecutará por separado.
+Compass mostró **5.154 resultados**, con la paginación `1–25 of 5154`. La captura incluye el filtro completo y parte del listado en vista de tabla. El conteo mediante agregación se ejecutó por separado en el ejercicio 2.
 
 ![Listado de películas de 1999](evidencias/08_consulta_peliculas_1999.png)
 
@@ -415,20 +415,103 @@ La captura muestra una vista previa de diez documentos; la tabla transcribe úni
 
 ## 4. Ejercicio 3: modificaciones
 
-Pendiente de ejecución y documentación.
+### 4.1. Agregar género y créditos a Fight Club de 1999
 
-- [ ] Localizar Fight Club de 1999.
-- [ ] Agregar la etiqueta de género «Comedia oscura».
-- [ ] Incorporar director, director de fotografía, producción y elenco, citando las fuentes de los créditos.
-- [ ] Insertar Shrek 5 con los valores indicados en la consigna y explicar el tratamiento de los datos ausentes.
-- [ ] Consultar los documentos resultantes para verificar las modificaciones.
+Se reutilizó la identificación obtenida en el ejercicio 1: `tt0137523`. En la shell de Compass se ejecutó una única actualización:
+
+```javascript
+db.getSiblingDB("imdb_burghi_2026").titulos.updateOne(
+  {
+    _id: "tt0137523",
+    primaryTitle: "Fight Club",
+    startYear: 1999
+  },
+  {
+    $addToSet: { genres: "Comedia oscura" },
+    $set: {
+      equipo: {
+        director: "David Fincher",
+        directorFotografia: "Jeff Cronenweth",
+        produccion: {
+          productores: ["Art Linson", "Ceán Chaffin", "Ross Grayson Bell"],
+          productoras: ["Fox 2000 Pictures", "New Regency Productions"]
+        },
+        elencoPrincipal: [
+          "Brad Pitt", "Edward Norton", "Helena Bonham Carter",
+          "Meat Loaf", "Jared Leto"
+        ]
+      }
+    }
+  }
+);
+```
+
+La respuesta observada fue `acknowledged: true`, `matchedCount: 1` y `modifiedCount: 1`. Se modificó una película existente.
+
+`$addToSet` añade la etiqueta sin borrar los géneros anteriores ni repetirla si ya existe. `$set` incorpora el subdocumento `equipo`. Se incluyen el director, el director de fotografía, productores, productoras y una selección del elenco principal; no se presenta como el reparto completo. Los créditos se verificaron en el [catálogo del American Film Institute](https://catalog.afi.com/Catalog/moviedetails/61148), consultado el 22 de octubre de 2026.
+
+Se verificó el documento guardado con:
+
+```javascript
+db.getSiblingDB("imdb_burghi_2026").titulos.findOne(
+  { _id: "tt0137523" },
+  { _id: 1, primaryTitle: 1, startYear: 1, genres: 1, equipo: 1 }
+);
+```
+
+La consulta devuelve Fight Club de 1999, con los géneros `Crime`, `Drama`, `Thriller` y `Comedia oscura`, y los créditos indicados. El equipo se embebe porque es información breve que se consulta con la ficha; no modifica los documentos de `personas` ni establece referencias nuevas a ellos.
+
+![Fight Club actualizado y consultado](evidencias/18_fight_club_actualizado.png)
+
+*Figura 18. Documento persistido de Fight Club de 1999: género Comedia oscura y equipo incorporado.*
+
+### 4.2. Insertar Shrek 5 y consultar el documento
+
+Se ejecutó:
+
+```javascript
+db.getSiblingDB("imdb_burghi_2026").titulos.insertOne({
+  _id: "local:burghi:shrek5:2026",
+  titleType: "movie",
+  primaryTitle: "Shrek 5",
+  originalTitle: "Shrek 5",
+  isAdult: 0,
+  startYear: 2026,
+  endYear: null,
+  runtimeMinutes: null,
+  genres: ["Drama", "Short"]
+});
+
+db.getSiblingDB("imdb_burghi_2026").titulos.findOne({
+  _id: "local:burghi:shrek5:2026"
+});
+```
+
+Se respetan el año 2026 y los géneros Drama y Short indicados en la consigna. El valor `\\N` de `endYear` se representa como `null`, igual que en la importación, y `runtimeMinutes` queda en `null` porque la consigna no proporciona una duración. Los géneros se guardan en un array, manteniendo el modelo.
+
+El identificador `local:burghi:shrek5:2026` pertenece al práctico y no se presenta como un identificador oficial de IMDb. Permite distinguir esta inserción de cualquier título de la fuente que tenga el mismo nombre.
+
+La consulta posterior devuelve el documento con todos los valores insertados, incluidos el identificador propio, los dos títulos, `isAdult: 0`, `startYear: 2026`, los dos campos nulos y el array de géneros.
+
+![Shrek 5 insertado y consultado](evidencias/19_shrek5_insertado.png)
+
+*Figura 19. Inserción y consulta posterior de Shrek 5 con los valores solicitados por la consigna.*
+
+### Avance de las modificaciones
+
+- [x] Localizar Fight Club de 1999.
+- [x] Agregar la etiqueta de género «Comedia oscura», conservando las anteriores.
+- [x] Incorporar director, director de fotografía, producción y elenco principal, con fuente de los créditos.
+- [x] Insertar Shrek 5 con los valores de la consigna y explicar los datos ausentes.
+- [x] Consultar los documentos resultantes para verificar las modificaciones.
 
 ## Evidencias
 
-Las capturas se guardarán en [`evidencias/`](evidencias/README.md). Se incorporarán al documento junto al paso que demuestran, con numeración y una explicación breve. Las consultas y sus resultados deberán ser legibles; los resultados vacíos también se documentarán cuando correspondan.
+Las capturas se conservan en [`evidencias/`](evidencias/README.md). Se incorporan al documento junto al paso que demuestran, con numeración y una explicación breve. Las consultas y sus resultados se documentan con código, explicación e imágenes; los resultados vacíos también se documentarán cuando correspondan.
 
 ## Fuentes
 
 - Presentación de clase: «Clase 4 - 5 - NoSQL 2026», páginas 102, 103 y 105.
 - Consigna de entrega: «Ejercicio MongoDB (1 al 3)» y aviso del docente del 14 de octubre de 2026.
 - [IMDb Non-Commercial Datasets](https://data.imdb.com/non-commercial-datasets/).
+- [AFI: Fight Club (1999)](https://catalog.afi.com/Catalog/moviedetails/61148), para los créditos del ejercicio 3.
