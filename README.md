@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. Se completaron las dos primeras agregaciones del ejercicio 2: ordenamiento por año y conteo de películas de 1999. Restan las agregaciones de westerns y las modificaciones del ejercicio 3.
+**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. Se completaron tres agregaciones del ejercicio 2: ordenamiento por año, conteo de películas de 1999 y conteo de westerns. Restan el array de títulos, la agrupación por género y las modificaciones del ejercicio 3.
 
 ## 1. Entorno e importación de los datos
 
@@ -324,11 +324,34 @@ La agregación confirma **5.154 películas**, coincidiendo con el total observad
 
 *Figura 14. Pipeline match y count, con el resultado cantidadPeliculas1999: 5154 visible en el panel de salida de Compass.*
 
+### 3.3. Contar las películas de género Western
+
+En la colección `titulos` se utilizó:
+
+```javascript
+[
+  { $match: { titleType: "movie", genres: "Western" } },
+  { $count: "cantidadWesterns" }
+]
+```
+
+La igualdad sobre `genres` selecciona los documentos cuyo array contiene `"Western"`, aunque tengan también otros géneros. El panel de salida de Compass muestra:
+
+```javascript
+{ cantidadWesterns: 8185 }
+```
+
+Se obtuvieron **8.185 películas de género Western**.
+
+![Conteo de películas Western](evidencias/15_agregacion_conteo_westerns.png)
+
+*Figura 15. Pipeline completo y resultado cantidadWesterns: 8185 en el panel de salida de Compass.*
+
 ### Avance de las agregaciones
 
 - [x] Ordenar por `startYear` los títulos cuyo `endYear` sea mayor que `startYear`.
 - [x] Contar las películas de 1999: 5.154.
-- [ ] Contar las películas de género Western.
+- [x] Contar las películas de género Western: 8.185.
 - [ ] Generar un array con los títulos de los westerns.
 - [ ] Agrupar los títulos de los westerns por género, explicitando el criterio utilizado.
 

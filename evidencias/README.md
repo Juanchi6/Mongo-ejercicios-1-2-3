@@ -22,6 +22,8 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 13b | [Resultados del ordenamiento](13b_agregacion_orden_startyear_resultados.png) | Resultados ejecutados con startYear ascendente: 1927, 1927, 1928. |
 | 14 | [Conteo de películas de 1999](14_agregacion_conteo_peliculas_1999.png) | Pipeline completo y resultado cantidadPeliculas1999: 5154. |
 
+| 15 | [Conteo de westerns](15_agregacion_conteo_westerns.png) | Filtro por movie y Western, con resultado cantidadWesterns: 8185. |
+
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 
 ## Criterio de registro
@@ -30,6 +32,6 @@ Las capturas se renombran con un número y una descripción breve al incorporarl
 - Evitar capturas de descargas, menús o pasos intermedios que no demuestren un resultado.
 - Mantener legibles el nombre de la base y colección, el filtro o pipeline utilizado y su resultado. Una consulta sin resultados también es una evidencia válida si se muestra el filtro y se explica.
 - Usar nombres numerados y descriptivos, por ejemplo `01_mongodb_docker.png`. El nombre concreto se indicará al llegar a cada captura.
-- Incorporar cada imagen al documento principal con un pie de figura y una explicación del resultado observado.
+- Documentar las operaciones con su código y resultado. Seleccionar capturas de resultados clave; reutilizar evidencia previa y agrupar comprobaciones cuando sea posible, sin exigir una imagen por cada paso.
 
 El documento principal está en [`README.md`](../README.md).
