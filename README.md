@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. El ejercicio 1 está documentado: entorno, importación de los tres archivos, justificación del modelo y consultas, con la interpretación de endYear explicada. Se incorporaron doce evidencias. Restan las agregaciones del ejercicio 2 y las modificaciones del ejercicio 3.
+**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. Se completó la primera agregación del ejercicio 2 y se incorporaron sus evidencias del pipeline y de los resultados. Restan las demás agregaciones y las modificaciones del ejercicio 3.
 
 ## 1. Entorno e importación de los datos
 
@@ -259,9 +259,46 @@ La interpretación del término «películas» en las consultas de `endYear` se 
 
 ## 3. Ejercicio 2: agregaciones
 
-Pendiente de ejecución y documentación.
+### 3.1. Ordenar por startYear los títulos cuyo endYear es mayor que startYear
 
-- [ ] Ordenar por `startYear` los títulos cuyo `endYear` sea mayor que `startYear`.
+En `imdb_burghi_2026.titulos` se abrió **Aggregations**, se seleccionó el modo de texto y se ejecutó el siguiente pipeline con **Run**:
+
+```javascript
+[
+  {
+    $match: {
+      startYear: { $type: "number" },
+      endYear: { $type: "number" },
+      $expr: { $gt: ["$endYear", "$startYear"] }
+    }
+  },
+  { $sort: { startYear: 1, _id: 1 } }
+]
+```
+
+`$match` conserva los títulos con ambos años numéricos y año final mayor que el inicial. Se mantiene la interpretación sobre todos los tipos de título explicada en el ejercicio 1. `$sort` ordena por `startYear` ascendente; `_id` se utiliza como segundo criterio para desempatar los títulos del mismo año.
+
+![Editor del pipeline de ordenamiento](evidencias/13a_agregacion_orden_startyear_pipeline.png)
+
+*Figura 13a. Editor de la agregación con las etapas match y sort, y vista previa de los documentos.*
+
+En la vista de resultados de la ejecución se observan, en este orden:
+
+| Título | startYear | endYear |
+|---|---:|---:|
+| GAC Gulf Athletic Club | 1927 | 1986 |
+| Giornale Luce | 1927 | 1945 |
+| Mickey Mouse Classic Shorts | 1928 | 2013 |
+
+Los años iniciales visibles están ordenados de menor a mayor y, en cada documento, el año final es mayor que el inicial. La interfaz muestra los primeros resultados; no se calculó un total adicional desde la opción **count results** de esta agregación.
+
+![Resultados ordenados por año de inicio](evidencias/13b_agregacion_orden_startyear_resultados.png)
+
+*Figura 13b. Resultados de la agregación: años de inicio 1927, 1927 y 1928, en orden ascendente.*
+
+### Avance de las agregaciones
+
+- [x] Ordenar por `startYear` los títulos cuyo `endYear` sea mayor que `startYear`.
 - [ ] Contar las películas de 1999.
 - [ ] Contar las películas de género Western.
 - [ ] Generar un array con los títulos de los westerns.

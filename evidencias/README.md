@@ -18,6 +18,8 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 10 | [Películas con endYear](10_consulta_peliculas_endyear_sin_resultados.png) | Consulta literal sobre movie con endYear numérico: cero coincidencias y mensaje No results. |
 | 11 | [Títulos con endYear](11_consulta_titulos_con_endyear.png) | Consulta complementaria sobre todos los tipos: 163.284 resultados, con ejemplos de tvSeries. |
 | 12 | [endYear mayor que startYear](12_consulta_endyear_mayor_startyear.png) | Comparación de campos numéricos sobre todos los tipos de título: 72.068 resultados. |
+| 13a | [Pipeline de ordenamiento](13a_agregacion_orden_startyear_pipeline.png) | Editor de la agregación con match, sort y vista previa. |
+| 13b | [Resultados del ordenamiento](13b_agregacion_orden_startyear_resultados.png) | Resultados ejecutados con startYear ascendente: 1927, 1927, 1928. |
 
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 
