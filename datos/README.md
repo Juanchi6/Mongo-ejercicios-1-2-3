@@ -18,7 +18,7 @@ Los recuentos de la tabla anterior corresponden a los archivos fuente. La carga 
 |---|---:|---|
 | `titulos` | 12.881.680 | [Figura 3: importación completada](../evidencias/03_importacion_titulos.png) |
 | `ratings` | 1.723.150 | [Figura 4: importación completada](../evidencias/04_importacion_ratings.png) |
-| `personas` | Pendiente | Pendiente |
+| `personas` | 15.750.813 | [Figura 5: importación completada](../evidencias/05_importacion_personas.png) |
 
 Los archivos de datos se conservan localmente. En el repositorio se registra el procedimiento para reproducir su preparación.
 

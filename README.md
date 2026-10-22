@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. MongoDB está funcionando en Docker y conectado desde Compass. Se importaron 12.881.680 documentos en `titulos` y 1.723.150 en `ratings`, con cuatro evidencias incorporadas. Restan las personas, la justificación del modelo y la resolución de los ejercicios.
+**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y verificadas mediante cinco evidencias. El modelo documental está justificado. Restan las consultas, las agregaciones y las modificaciones de los ejercicios 1 a 3.
 
 ## 1. Entorno e importación de los datos
 
@@ -67,14 +67,50 @@ Compass confirmó **Import completed: 1.723.150 documents imported**, y el mismo
 
 *Figura 4. Colección ratings con 1.723.150 documentos y confirmación de importación completada en MongoDB Compass, el 22 de octubre de 2026.*
 
+### 1.6. Importación de las personas
+
+Se creó la colección normal `personas` dentro de `imdb_burghi_2026`. Desde **Add Data → Import JSON or CSV file** se importó `personas.json`, preparado a partir del archivo completo `name.basics.tsv.gz`.
+
+Compass confirmó **Import completed: 15.750.813 documents imported**, y el mismo total aparece en la navegación de documentos. La captura muestra las tres colecciones del práctico y documentos de ejemplo con `_id`, `primaryName`, `birthYear`, `deathYear`, `primaryProfession` y `knownForTitles`. Los años aparecen como números, y las profesiones y los títulos conocidos como arrays.
+
+![Importación completa de las personas de IMDb](evidencias/05_importacion_personas.png)
+
+*Figura 5. Colección personas con 15.750.813 documentos y confirmación de importación completada en MongoDB Compass, el 22 de octubre de 2026.*
+
+### 1.7. Modelo documental y justificación
+
+Se eligió un modelo con tres colecciones, utilizando documentos independientes para los títulos, sus valoraciones y las personas. Las capturas de las importaciones muestran la estructura resultante.
+
+| Colección | Identificador | Datos principales |
+|---|---|---|
+| `titulos` | `_id` conserva el `tconst` original | Tipo, título principal y original, indicador de contenido adulto, años, duración y array de géneros. |
+| `ratings` | `_id` conserva el `tconst` original | Valoración promedio y cantidad de votos. |
+| `personas` | `_id` conserva el `nconst` original | Nombre, años de nacimiento y fallecimiento, arrays de profesiones y títulos conocidos. |
+
+**Relaciones y referencias.** El documento de `ratings` se relaciona con el título que tiene el mismo `_id`. Para este modelo, cada título puede tener cero o una valoración agregada: no todos aparecen en el archivo de valoraciones. Las entradas de `personas.knownForTitles` son identificadores de `titulos`. Una persona puede tener varios títulos conocidos y un título puede estar asociado a varias personas. Estas son referencias lógicas; no se configuraron restricciones de clave foránea.
+
+`knownForTitles` solo contiene obras por las que una persona es conocida. No representa su filmografía completa ni permite reconstruir por sí solo el elenco o los roles de una película. Los créditos solicitados en el ejercicio 3 se verificarán con fuentes adicionales.
+
+**Datos incluidos dentro del documento.** Los géneros y las profesiones se almacenaron como arrays porque son listas cortas que se consultan junto al título o la persona. No se crearon colecciones separadas para cada valor de esas listas.
+
+**Datos en colecciones separadas.** Las personas se mantienen independientes para evitar repetir sus datos en cada título. Las valoraciones también se mantienen separadas para conservar la correspondencia con los tres archivos importados y permitir actualizar el promedio y los votos sin modificar los datos descriptivos del título. Las consultas solicitadas sobre títulos pueden ejecutarse directamente en `titulos`. Cuando se necesite mostrar la ficha junto con su valoración, se podrá relacionarlas mediante `$lookup`; esa operación todavía no se ejecutó como parte de esta entrega.
+
+Embeber la valoración en el título sería una alternativa válida si se priorizara leer ambos datos juntos. La decisión utilizada aquí favorece la carga y actualización independiente de las fuentes; no se afirma que sea la opción más rápida para cualquier aplicación.
+
+**Tipos y valores ausentes.** Los años y la duración se guardaron como números para poder comparar y ordenar sus valores. También son numéricos `averageRating`, `numVotes` e `isAdult` (se conserva 0/1). El marcador de ausencia `\N` se convirtió a `null` en campos escalares y a un array vacío en campos multivaluados. Los identificadores se conservan como cadenas. La preparación de los datos aplica estas reglas; no se configuró un validador de esquema en el servidor.
+
+Se conservaron todos los tipos de título. En las consultas que pidan películas se usará `titleType: "movie"`; las comparaciones con `endYear` requieren explicar su uso en series.
+
+El criterio de elegir entre datos embebidos y referencias se apoya en los conceptos de modelado de la presentación y en las [recomendaciones de modelado de MongoDB](https://www.mongodb.com/docs/manual/data-modeling/best-practices/). Las definiciones de los campos provienen de [IMDb](https://data.imdb.com/non-commercial-datasets/).
+
 ### Avance de la configuración
 
 - [x] MongoDB funcionando en Docker.
 - [x] Conexión desde MongoDB Compass.
 - [x] Importación de `title.basics` en `titulos`: 12.881.680 documentos.
 - [x] Importación de `title.ratings` en `ratings`: 1.723.150 documentos.
-- [ ] Importación de `name.basics` en `personas` y comprobación del recuento.
-- [ ] Modelo de documentos, tipos de datos y justificación.
+- [x] Importación de `name.basics` en `personas`: 15.750.813 documentos.
+- [x] Modelo de documentos, tipos de datos y justificación.
 
 ## 2. Ejercicio 1: consultas
 
