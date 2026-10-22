@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. El ejercicio 1 está en curso y se incorporaron diez evidencias, incluida la consulta de películas con endYear sin resultados. Restan las comprobaciones de endYear, las agregaciones y las modificaciones.
+**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. El ejercicio 1 está en curso y se incorporaron once evidencias. Se comprobó endYear tanto sobre películas como sobre todos los tipos de título. Resta comparar los años y realizar las agregaciones y modificaciones.
 
 ## 1. Entorno e importación de los datos
 
@@ -205,7 +205,23 @@ Compass devolvió **cero resultados**, con la paginación `0–0 of 0` y el mens
 
 *Figura 10. Consulta literal sobre películas con endYear numérico: filtro completo, cero coincidencias y mensaje No results.*
 
-Para explorar los títulos que sí tienen año de finalización, se realizará a continuación una comprobación complementaria sobre todos los tipos de título. Esa ampliación se distinguirá de la consulta literal solicitada.
+### Comprobación complementaria sobre todos los tipos de título
+
+Para observar los títulos que sí tienen un año de finalización se quitó la condición sobre `titleType` y se ejecutó:
+
+```javascript
+{
+  endYear: { $type: "number" }
+}
+```
+
+La ampliación se distingue de la consulta literal anterior: ahora se incluyen todos los tipos de título, entre ellos las series. Compass mostró **163.284 resultados**, con la paginación `1–25 of 163284`.
+
+Entre los documentos visibles aparecen `tt0035599`, de tipo `tvSeries`, con `startYear: 1943` y `endYear: 1947`, y `tt0035803`, también `tvSeries`, con años 1940 y 1945. La captura permite comprobar que los datos de finalización están cargados y que la ausencia de resultados anterior correspondía a la restricción por películas.
+
+![Títulos con un valor numérico de endYear](evidencias/11_consulta_titulos_con_endyear.png)
+
+*Figura 11. Consulta complementaria sobre todos los tipos de título: 163.284 resultados y ejemplos de series con startYear y endYear informados.*
 
 ### Avance de las consultas
 
@@ -214,7 +230,7 @@ Para explorar los títulos que sí tienen año de finalización, se realizará a
 - [x] Mostrar las películas de 1999.
 - [x] Mostrar las películas posteriores a 1999.
 - [x] Consultar películas con un valor de `endYear`: cero resultados.
-- [ ] Comprobar `endYear` sobre todos los tipos de título.
+- [x] Comprobar `endYear` sobre todos los tipos de título: 163.284 resultados.
 - [ ] Comparar `endYear` con `startYear`.
 
 La interpretación de las dos últimas consultas se explicará al documentarlas: la consigna utiliza el término «películas», mientras que IMDb define `endYear` para series de televisión.
