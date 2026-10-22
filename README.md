@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizaron las cuatro primeras consultas del ejercicio 1 y se incorporaron nueve evidencias. Continúan pendientes las consultas de endYear, las agregaciones y las modificaciones.
+**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. El ejercicio 1 está en curso y se incorporaron diez evidencias, incluida la consulta de películas con endYear sin resultados. Restan las comprobaciones de endYear, las agregaciones y las modificaciones.
 
 ## 1. Entorno e importación de los datos
 
@@ -186,13 +186,35 @@ Compass mostró **388.352 resultados**, con la paginación `1–25 of 388352`. L
 
 *Figura 9. Filtro de películas con startYear mayor que 1999 y total de 388.352 resultados.*
 
+### 2.5. Consultar películas con un valor de endYear
+
+Se interpretó primero el término «películas» de forma literal, manteniendo `titleType: "movie"`:
+
+```javascript
+{
+  titleType: "movie",
+  endYear: { $type: "number" }
+}
+```
+
+Se utilizó `$type: "number"` para exigir un año numérico y excluir los valores `null` introducidos al normalizar los datos ausentes.
+
+Compass devolvió **cero resultados**, con la paginación `0–0 of 0` y el mensaje **No results**. La ejecución es válida: [IMDb define endYear como el año de finalización de una serie](https://data.imdb.com/non-commercial-datasets/) y utiliza el marcador `\N` para los demás tipos de título. En nuestro modelo ese marcador se representa como `null`.
+
+![Consulta de películas con endYear sin resultados](evidencias/10_consulta_peliculas_endyear_sin_resultados.png)
+
+*Figura 10. Consulta literal sobre películas con endYear numérico: filtro completo, cero coincidencias y mensaje No results.*
+
+Para explorar los títulos que sí tienen año de finalización, se realizará a continuación una comprobación complementaria sobre todos los tipos de título. Esa ampliación se distinguirá de la consulta literal solicitada.
+
 ### Avance de las consultas
 
 - [x] Buscar la película Fight Club.
 - [x] Buscar Fight Club de 1999.
 - [x] Mostrar las películas de 1999.
 - [x] Mostrar las películas posteriores a 1999.
-- [ ] Consultar los títulos con un valor de `endYear`.
+- [x] Consultar películas con un valor de `endYear`: cero resultados.
+- [ ] Comprobar `endYear` sobre todos los tipos de título.
 - [ ] Comparar `endYear` con `startYear`.
 
 La interpretación de las dos últimas consultas se explicará al documentarlas: la consigna utiliza el término «películas», mientras que IMDb define `endYear` para series de televisión.
