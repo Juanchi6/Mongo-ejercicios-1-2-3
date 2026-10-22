@@ -21,8 +21,9 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 13a | [Pipeline de ordenamiento](13a_agregacion_orden_startyear_pipeline.png) | Editor de la agregación con match, sort y vista previa. |
 | 13b | [Resultados del ordenamiento](13b_agregacion_orden_startyear_resultados.png) | Resultados ejecutados con startYear ascendente: 1927, 1927, 1928. |
 | 14 | [Conteo de películas de 1999](14_agregacion_conteo_peliculas_1999.png) | Pipeline completo y resultado cantidadPeliculas1999: 5154. |
-
 | 15 | [Conteo de westerns](15_agregacion_conteo_westerns.png) | Filtro por movie y Western, con resultado cantidadWesterns: 8185. |
+| 16 | [Array de títulos de westerns](16_array_titulos_westerns.png) | Array de 8.185 elementos y cantidad: 8185. |
+| 17 | [Westerns agrupados por género](17_westerns_agrupados_genero.png) | Grupos Action, Adult, Adventure, Animation y Biography, con cantidades y arrays contraídos. |
 
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 

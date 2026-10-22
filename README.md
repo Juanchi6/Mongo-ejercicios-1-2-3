@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. Se completaron tres agregaciones del ejercicio 2: ordenamiento por año, conteo de películas de 1999 y conteo de westerns. Restan el array de títulos, la agrupación por género y las modificaciones del ejercicio 3.
+**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. El ejercicio 2 está documentado con sus cinco agregaciones. Restan las modificaciones del ejercicio 3.
 
 ## 1. Entorno e importación de los datos
 
@@ -347,13 +347,71 @@ Se obtuvieron **8.185 películas de género Western**.
 
 *Figura 15. Pipeline completo y resultado cantidadWesterns: 8185 en el panel de salida de Compass.*
 
+### 3.4. Generar un array con los títulos de los westerns
+
+Se ejecutó el siguiente pipeline sobre `titulos`:
+
+```javascript
+[
+  { $match: { titleType: "movie", genres: "Western" } },
+  { $sort: { primaryTitle: 1, _id: 1 } },
+  { $group: { _id: null, titulos: { $push: "$primaryTitle" } } },
+  { $project: { _id: 0, cantidad: { $size: "$titulos" }, titulos: 1 } }
+]
+```
+
+Se agrupan todas las películas seleccionadas en un único documento y se acumula su título principal con `$push`. Se conserva una entrada por película, incluso si dos películas comparten el mismo nombre. El orden se establece antes de agrupar.
+
+Compass muestra `titulos: Array (8185)` y `cantidad: 8185`, coincidiendo con el conteo del punto anterior. El array aparece contraído en la captura.
+
+![Array de títulos de westerns](evidencias/16_array_titulos_westerns.png)
+
+*Figura 16. Documento resultante con un array de 8.185 títulos y comprobación de su longitud.*
+
+### 3.5. Listar los títulos de los westerns agrupados por género
+
+```javascript
+[
+  { $match: { titleType: "movie", genres: "Western" } },
+  { $unwind: "$genres" },
+  { $sort: { genres: 1, primaryTitle: 1, _id: 1 } },
+  {
+    $group: {
+      _id: "$genres",
+      cantidad: { $sum: 1 },
+      titulos: { $push: "$primaryTitle" }
+    }
+  },
+  { $sort: { _id: 1 } },
+  { $project: { _id: 0, genero: "$_id", cantidad: 1, titulos: 1 } }
+]
+```
+
+**Criterio de agrupación:** primero se seleccionan exclusivamente películas cuyo array contiene Western. Luego `$unwind` separa los géneros de cada película, de modo que un western que también es Drama aparece tanto en el grupo Western como en Drama. Cada resultado contiene el género, la cantidad de películas y un array con sus títulos. Los grupos se ordenan por género y sus títulos por nombre.
+
+La salida visible de Compass incluye:
+
+| Género asociado a las películas Western | Cantidad | Longitud del array visible |
+|---|---:|---:|
+| Action | 505 | 505 |
+| Adult | 26 | 26 |
+| Adventure | 339 | 339 |
+| Animation | 7 | 7 |
+| Biography | 25 | 25 |
+
+La captura muestra una vista previa de diez documentos; la tabla transcribe únicamente los cinco grupos legibles. Los arrays están contraídos. Como una película puede tener varios géneros, sumar las cantidades de todos los grupos contaría algunas películas más de una vez.
+
+![Westerns agrupados por género](evidencias/17_westerns_agrupados_genero.png)
+
+*Figura 17. Agrupación por cada género asociado a los westerns, con cantidad y array de títulos por grupo.*
+
 ### Avance de las agregaciones
 
 - [x] Ordenar por `startYear` los títulos cuyo `endYear` sea mayor que `startYear`.
 - [x] Contar las películas de 1999: 5.154.
 - [x] Contar las películas de género Western: 8.185.
-- [ ] Generar un array con los títulos de los westerns.
-- [ ] Agrupar los títulos de los westerns por género, explicitando el criterio utilizado.
+- [x] Generar un array con los títulos de los westerns: 8.185 elementos.
+- [x] Agrupar los títulos de los westerns por género, explicitando el criterio utilizado.
 
 ## 4. Ejercicio 3: modificaciones
 
