@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. Se completó la primera agregación del ejercicio 2 y se incorporaron sus evidencias del pipeline y de los resultados. Restan las demás agregaciones y las modificaciones del ejercicio 3.
+**Estado:** en elaboración. El ejercicio 1 está documentado, con la interpretación de endYear explicada. Se completaron las dos primeras agregaciones del ejercicio 2: ordenamiento por año y conteo de películas de 1999. Restan las agregaciones de westerns y las modificaciones del ejercicio 3.
 
 ## 1. Entorno e importación de los datos
 
@@ -296,10 +296,38 @@ Los años iniciales visibles están ordenados de menor a mayor y, en cada docume
 
 *Figura 13b. Resultados de la agregación: años de inicio 1927, 1927 y 1928, en orden ascendente.*
 
+### 3.2. Contar las películas de 1999
+
+En el editor de agregaciones de `titulos` se utilizó:
+
+```javascript
+[
+  {
+    $match: {
+      titleType: "movie",
+      startYear: 1999
+    }
+  },
+  { $count: "cantidadPeliculas1999" }
+]
+```
+
+`$match` selecciona las películas de 1999 y `$count` devuelve el número de documentos que cumplen el filtro. El panel de salida muestra un documento con el resultado:
+
+```javascript
+{ cantidadPeliculas1999: 5154 }
+```
+
+La agregación confirma **5.154 películas**, coincidiendo con el total observado en la consulta del ejercicio 1.
+
+![Conteo de películas de 1999 mediante agregación](evidencias/14_agregacion_conteo_peliculas_1999.png)
+
+*Figura 14. Pipeline match y count, con el resultado cantidadPeliculas1999: 5154 visible en el panel de salida de Compass.*
+
 ### Avance de las agregaciones
 
 - [x] Ordenar por `startYear` los títulos cuyo `endYear` sea mayor que `startYear`.
-- [ ] Contar las películas de 1999.
+- [x] Contar las películas de 1999: 5.154.
 - [ ] Contar las películas de género Western.
 - [ ] Generar un array con los títulos de los westerns.
 - [ ] Agrupar los títulos de los westerns por género, explicitando el criterio utilizado.

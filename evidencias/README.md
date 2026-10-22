@@ -20,6 +20,7 @@ Esta carpeta reúne las capturas de los resultados clave del práctico.
 | 12 | [endYear mayor que startYear](12_consulta_endyear_mayor_startyear.png) | Comparación de campos numéricos sobre todos los tipos de título: 72.068 resultados. |
 | 13a | [Pipeline de ordenamiento](13a_agregacion_orden_startyear_pipeline.png) | Editor de la agregación con match, sort y vista previa. |
 | 13b | [Resultados del ordenamiento](13b_agregacion_orden_startyear_resultados.png) | Resultados ejecutados con startYear ascendente: 1927, 1927, 1928. |
+| 14 | [Conteo de películas de 1999](14_agregacion_conteo_peliculas_1999.png) | Pipeline completo y resultado cantidadPeliculas1999: 5154. |
 
 Las capturas se renombran con un número y una descripción breve al incorporarlas al documento.
 
