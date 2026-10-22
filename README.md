@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. El ejercicio 1 está en curso y se incorporaron once evidencias. Se comprobó endYear tanto sobre películas como sobre todos los tipos de título. Resta comparar los años y realizar las agregaciones y modificaciones.
+**Estado:** en elaboración. El ejercicio 1 está documentado: entorno, importación de los tres archivos, justificación del modelo y consultas, con la interpretación de endYear explicada. Se incorporaron doce evidencias. Restan las agregaciones del ejercicio 2 y las modificaciones del ejercicio 3.
 
 ## 1. Entorno e importación de los datos
 
@@ -223,6 +223,28 @@ Entre los documentos visibles aparecen `tt0035599`, de tipo `tvSeries`, con `sta
 
 *Figura 11. Consulta complementaria sobre todos los tipos de título: 163.284 resultados y ejemplos de series con startYear y endYear informados.*
 
+### 2.6. Comparar endYear con startYear
+
+Se continuó con la interpretación sobre todos los tipos de título para incluir las series cuyos años de inicio y finalización están informados:
+
+```javascript
+{
+  startYear: { $type: "number" },
+  endYear: { $type: "number" },
+  $expr: { $gt: ["$endYear", "$startYear"] }
+}
+```
+
+Las dos primeras condiciones requieren valores numéricos. `$expr` permite comparar dos campos del mismo documento: `$gt` comprueba si `endYear` es estrictamente mayor que `startYear`.
+
+Compass mostró **72.068 resultados**, con la paginación `1–25 of 72068`. Se observan, entre otros, los títulos `tt0035599` (1943–1947) y `tt0035803` (1940–1945), de tipo `tvSeries`, cuyos años cumplen la comparación.
+
+![Títulos cuyo año final es mayor que el inicial](evidencias/12_consulta_endyear_mayor_startyear.png)
+
+*Figura 12. Comparación endYear mayor que startYear: 72.068 resultados y documentos con ambos años visibles. El filtro completo utilizado se transcribe en esta sección.*
+
+**Alcance de la interpretación.** La consigna utiliza el término «películas», pero el campo `endYear` corresponde a series en la fuente de IMDb. Por eso se mostró primero la consulta literal sobre `movie`, sin coincidencias, y luego las consultas sobre todos los tipos de título para demostrar el uso del campo y la comparación. Si a esta última consulta se agregara `titleType: "movie"`, necesariamente seguiría vacía: sería un subconjunto de la consulta sin resultados de la figura 10. Esta última afirmación es una deducción de esa evidencia; no se presenta como otra ejecución.
+
 ### Avance de las consultas
 
 - [x] Buscar la película Fight Club.
@@ -231,9 +253,9 @@ Entre los documentos visibles aparecen `tt0035599`, de tipo `tvSeries`, con `sta
 - [x] Mostrar las películas posteriores a 1999.
 - [x] Consultar películas con un valor de `endYear`: cero resultados.
 - [x] Comprobar `endYear` sobre todos los tipos de título: 163.284 resultados.
-- [ ] Comparar `endYear` con `startYear`.
+- [x] Comparar `endYear` con `startYear` sobre todos los tipos de título: 72.068 resultados.
 
-La interpretación de las dos últimas consultas se explicará al documentarlas: la consigna utiliza el término «películas», mientras que IMDb define `endYear` para series de televisión.
+La interpretación del término «películas» en las consultas de `endYear` se detalla en las secciones 2.5 y 2.6.
 
 ## 3. Ejercicio 2: agregaciones
 
