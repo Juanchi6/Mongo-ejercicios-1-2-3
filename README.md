@@ -9,7 +9,7 @@ Este documento se utilizará para registrar la resolución de los ejercicios de 
 
 El trabajo comprende la configuración del entorno, la importación de `title.basics`, `title.ratings` y `name.basics`, la justificación del modelo documental, las consultas, las agregaciones y las modificaciones solicitadas. RocketDB corresponde a una entrega anterior; los ejercicios 4 y 5 quedan fuera del alcance de esta entrega.
 
-**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizaron las dos consultas de Fight Club y se incorporaron siete evidencias. Continúan pendientes las demás consultas, las agregaciones y las modificaciones.
+**Estado:** en elaboración. Las tres colecciones de IMDb están importadas y el modelo documental está justificado. Se realizaron las tres primeras consultas del ejercicio 1 y se incorporaron ocho evidencias. Continúan pendientes las demás consultas, las agregaciones y las modificaciones.
 
 ## 1. Entorno e importación de los datos
 
@@ -148,11 +148,30 @@ Las tres condiciones deben cumplirse simultáneamente. El año se compara como n
 
 *Figura 7. Filtro completo por película, título y año, con un único resultado: Fight Club de 1999.*
 
+### 2.3. Mostrar las películas de 1999
+
+En `imdb_burghi_2026.titulos` se quitó la condición sobre el nombre y se ejecutó:
+
+```javascript
+{
+  titleType: "movie",
+  startYear: 1999
+}
+```
+
+El filtro selecciona los títulos de tipo película cuyo año de inicio es 1999. No incluye series, episodios ni cortometrajes con otro `titleType`.
+
+Compass mostró **5.154 resultados**, con la paginación `1–25 of 5154`. La captura incluye el filtro completo y parte del listado en vista de tabla. El conteo mediante agregación solicitado en el ejercicio 2 se ejecutará por separado.
+
+![Listado de películas de 1999](evidencias/08_consulta_peliculas_1999.png)
+
+*Figura 8. Películas de 1999: filtro por tipo y año, listado de resultados y total de 5.154 documentos en Compass.*
+
 ### Avance de las consultas
 
 - [x] Buscar la película Fight Club.
 - [x] Buscar Fight Club de 1999.
-- [ ] Mostrar las películas de 1999.
+- [x] Mostrar las películas de 1999.
 - [ ] Mostrar las películas posteriores a 1999.
 - [ ] Consultar los títulos con un valor de `endYear`.
 - [ ] Comparar `endYear` con `startYear`.
